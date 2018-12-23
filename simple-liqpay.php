@@ -33,31 +33,31 @@ function woocommerce_init() {
             $this->public_key = $this->get_option('public_key');
             $this->private_key = $this->get_option('private_key');
             $this->sandbox = $this->get_option('sandbox');
-			if ($this->get_option('lang') == 'ru/en' && !is_admin()) {
-				$this->lang = call_user_func($this->get_option('lang_function'));
-				if ($this->lang == 'ru') {
-					$key = 0;
-				} else {
-					$key = 1;	
-				}
-				$array_explode = explode('::', $this->get_option('title'));
-				$this->title = $array_explode[$key];
-				$array_explode = explode('::', $this->get_option('description'));
-				$this->description = $array_explode[$key];
-				$array_explode = explode('::', $this->get_option('pay_message'));
-			    $this->pay_message = $array_explode[$key];
-			} else {
-				$this->lang = $this->get_option('lang');
-				$this->title = $this->get_option('title');
-				$this->description = $this->get_option('description');
-			    $this->pay_message = $this->get_option('pay_message');
-			}
+            if ($this->get_option('lang') == 'ru/en' && !is_admin()) {
+                $this->lang = call_user_func($this->get_option('lang_function'));
+                if ($this->lang == 'ru') {
+                    $key = 0;
+                } else {
+                    $key = 1;
+                }
+                $array_explode = explode('::', $this->get_option('title'));
+                $this->title = $array_explode[$key];
+                $array_explode = explode('::', $this->get_option('description'));
+                $this->description = $array_explode[$key];
+                $array_explode = explode('::', $this->get_option('pay_message'));
+                $this->pay_message = $array_explode[$key];
+            } else {
+                $this->lang = $this->get_option('lang');
+                $this->title = $this->get_option('title');
+                $this->description = $this->get_option('description');
+                $this->pay_message = $this->get_option('pay_message');
+            }
             $this->icon = $this->get_option('icon');
-			$this->status = $this->get_option('status');
-			$this->redirect_page = $this->get_option('redirect_page');
-			$this->function_id = $this->get_option('function_id');	
-			$this->button = $this->get_option('button');
-			
+            $this->status = $this->get_option('status');
+            $this->redirect_page = $this->get_option('redirect_page');
+            $this->function_id = $this->get_option('function_id');
+            $this->button = $this->get_option('button');
+
             // Actions
             add_action('woocommerce_receipt_liqpay', array($this, 'receipt_page'));
             add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
@@ -69,7 +69,7 @@ function woocommerce_init() {
                 $this->enabled = false;
             }
         }
-		
+
 
         public function admin_options() { ?>
 
@@ -131,39 +131,39 @@ function woocommerce_init() {
                     'description' => __('Private key LiqPay. Обязательный параметр', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
-				'lang' => array(
+                'lang' => array(
                     'title'       => __('Язык', 'woocommerce'),
                     'type'        => 'select',
-					'default'     => 'ru',
-					'options'     => array('ru'=> __('ru', 'woocommerce'), 'en'=> __('en', 'woocommerce'), 'ru/en'=> __('ru + en', 'woocommerce')),
+                    'default'     => 'ru',
+                    'options'     => array('ru'=> __('ru', 'woocommerce'), 'en'=> __('en', 'woocommerce'), 'ru/en'=> __('ru + en', 'woocommerce')),
                     'description' => __('Язык интерфейса (Для ru + en установите мультиленг плагин. Разделение языков с помощью :: .)', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
-				'lang_function'     => array(
+                'lang_function'     => array(
                     'title'       => __('Функция определения языка', 'woocommerce'),
                     'type'        => 'text',
-					'default'     => 'pll_current_language',
+                    'default'     => 'pll_current_language',
                     'description' => __('Функция определения языка Вашего плагина', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
-				'icon'     => array(
+                'icon'     => array(
                     'title'       => __('Логотип', 'woocommerce'),
                     'type'        => 'text',
-					'default'     => 'https://www.liqpay.ua/1440663992860980/static/img/business/logo.png',
+                    'default'     => 'https://www.liqpay.com/1440663992860980/static/img/business/logo.png',
                     'description' => __('Полный путь к логотипу, расположен на странице заказа', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
-				'button'     => array(
+                'button'     => array(
                     'title'       => __('Кнопка', 'woocommerce'),
                     'type'        => 'text',
-					'default'     => '',
+                    'default'     => '',
                     'description' => __('Полный путь к картинке кнопки для перехода на LiqPay', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
-				'status'     => array(
+                'status'     => array(
                     'title'       => __('Статус заказа', 'woocommerce'),
                     'type'        => 'text',
-					'default'     => 'processing',
+                    'default'     => 'processing',
                     'description' => __('Статус заказа после успешной оплаты', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
@@ -174,17 +174,17 @@ function woocommerce_init() {
                     'description' => __('Данный режим, поможет протестировать оплату, без снятия средств с карточек', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
-				'redirect_page'     => array(
+                'redirect_page'     => array(
                     'title'       => __('URL Thanks Page', 'woocommerce'),
                     'type'        => 'text',
-					'default'     => '',
+                    'default'     => '',
                     'description' => __('URL страницы, на которую перейти после оплаты в LiqPay', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
-				'function_id'     => array(
+                'function_id'     => array(
                     'title'       => __('Function заказа', 'woocommerce'),
                     'type'        => 'text',
-					'default'     => '',
+                    'default'     => '',
                     'description' => __('Функция должна вернуть Номер заказа', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
@@ -202,9 +202,11 @@ function woocommerce_init() {
             $order = new WC_Order($order_id);
             return array(
                 'result'   => 'success',
-				'redirect' => add_query_arg('order', $order->id, add_query_arg('key', $order->order_key, get_permalink(wc_get_page_id('pay'))))
+                'redirect' => add_query_arg('order', $order->get_id(), add_query_arg('key', $order->get_order_key(), get_permalink(wc_get_page_id('pay'))))
             );
         }
+
+        
 
         public function receipt_page($order) {
             echo '<p>' . __(esc_attr($this->pay_message), 'woocommerce') . '</p><br/>';
@@ -225,22 +227,22 @@ function woocommerce_init() {
             } else {
                 $sandbox = 0;
             }
-			
-			if (trim($this->redirect_page) == '') {
-				$redirect_page_url = $order->get_checkout_order_received_url();
-			} else {
-				$redirect_page_url = trim($this->redirect_page);
-			}
-					
-			if (trim($this->function_id) == '') {
-				$order_number = $order_id;
-			} else {
-				$order_number = call_user_func($this->function_id);
-			}				
-					
+
+            if (trim($this->redirect_page) == '') {
+                $redirect_page_url = $order->get_checkout_order_received_url();
+            } else {
+                $redirect_page_url = trim($this->redirect_page);
+            }
+
+            if (trim($this->function_id) == '') {
+                $order_number = $order_id;
+            } else {
+                $order_number = $order->get_id();
+            }
+
             $html = $this->cnb_form(array(
                 'version'     => '3',
-                'amount'      => esc_attr($order->order_total),
+                'amount'      => esc_attr($order->get_total()),
                 'currency'    => esc_attr($currency),
                 'description' => _("Оплата за заказ - ") . $order_number,
                 'order_id'    => esc_attr($order_id),
@@ -299,12 +301,12 @@ function woocommerce_init() {
             $data      = base64_encode( json_encode($params) );
             $signature = $this->cnb_signature($params);
 
-			if (trim($this->button) == '') {
-				$button = '<input type="image" style="width: 160px" src="//static.liqpay.ua/buttons/p1%s.radius.png" name="btn_text" />';
-			} else {
-				$button = '<input type="image" style="width: 160px" src="'.$this->button.'" name="btn_text" />';
-			}
-			
+            if (trim($this->button) == '') {
+                $button = '<input type="image" style="width: 160px" src="//static.liqpay.com/buttons/p1%s.radius.png" name="btn_text" />';
+            } else {
+                $button = '<input type="image" style="width: 160px" src="'.$this->button.'" name="btn_text" />';
+            }
+
             return sprintf('
             <form method="POST" action="%s" accept-charset="utf-8">
                 %s
