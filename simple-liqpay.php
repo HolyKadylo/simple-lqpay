@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce Simple LiqPay
 Plugin URI:
 Description: LiqPay gateway for WooCommerce
-Version: 1.7
+Version: 1.7.1
 Author: Alex Shandor
 Author URI: http://pupuga.net
 */
@@ -18,7 +18,7 @@ function woocommerce_init() {
     class WC_Gateway_Liqpay extends WC_Payment_Gateway
     {
         private $_checkout_url = 'https://www.liqpay.ua/api/checkout';
-        protected $_supportedCurrencies = array('EUR','UAH','USD','RUB','RUR');
+        protected $_supportedCurrencies = array('EUR','UAH','USD');
 
         public function __construct() {
 
@@ -27,15 +27,15 @@ function woocommerce_init() {
             $this->id = 'liqpay';
             $this->has_fields = false;
             $this->method_title = __('liqPay', 'woocommerce');
-            $this->method_description = __('Платежная система LiqPay', 'woocommerce');
+            $this->method_description = __('LiqPay', 'woocommerce');
             $this->init_form_fields();
             $this->init_settings();
             $this->public_key = $this->get_option('public_key');
             $this->private_key = $this->get_option('private_key');
             $this->sandbox = $this->get_option('sandbox');
-            if ($this->get_option('lang') == 'ru/en' && !is_admin()) {
+            if ($this->get_option('lang') == 'uk/en' && !is_admin()) {
                 $this->lang = call_user_func($this->get_option('lang_function'));
-                if ($this->lang == 'ru') {
+                if ($this->lang == 'uk') {
                     $key = 0;
                 } else {
                     $key = 1;
@@ -73,7 +73,7 @@ function woocommerce_init() {
 
         public function admin_options() { ?>
 
-            <h3><?php _e('Платежная система LiqPay', 'woocommerce'); ?></h3>
+            <h3><?php _e('LiqPay', 'woocommerce'); ?></h3>
 
             <?php if ($this->is_valid_for_use()) { ?>
                 <table class="form-table"><?php $this->generate_settings_html(); ?></table>
@@ -81,7 +81,7 @@ function woocommerce_init() {
 
                 <div class="inline error">
                     <p>
-                        <strong><?php _e('Шлюз отключен', 'woocommerce'); ?></strong>: <?php _e('Liqpay не поддерживает валюты Вашего магазина.', 'woocommerce'); ?>
+                        <strong><?php _e('Gateway error', 'woocommerce'); ?></strong>: <?php _e('Liqpay не підтримує такі валюти', 'woocommerce'); ?>
                     </p>
                 </div>
 
@@ -93,106 +93,106 @@ function woocommerce_init() {
 
             $this->form_fields = array(
                 'enabled'     => array(
-                    'title'   => __('Включить/Выключить', 'woocommerce'),
+                    'title'   => __('Ввімкнути/Вимкнути', 'woocommerce'),
                     'type'    => 'checkbox',
-                    'label'   => __('Включить', 'woocommerce'),
+                    'label'   => __('Ввімкнути', 'woocommerce'),
                     'default' => 'yes',
                 ),
                 'title'       => array(
                     'title'       => __('Заголовок', 'woocommerce'),
                     'type'        => 'textarea',
-                    'description' => __('Заголовок, который отображается на странице оформления заказа', 'woocommerce'),
-                    'default'     => __('Оплата картой Visa/MasterCard (LiqPay)::Payment via Visa / MasterCard (LiqPay)'),
+                    'description' => __('Заголовок, який відображається на сторінці оформлення', 'woocommerce'),
+                    'default'     => __('Оплата карткою Visa/MasterCard (LiqPay)::Payment via Visa / MasterCard (LiqPay)'),
                     'desc_tip'    => true,
                 ),
                 'description' => array(
-                    'title'       => __('Описание', 'woocommerce'),
+                    'title'       => __('Опис', 'woocommerce'),
                     'type'        => 'textarea',
-                    'description' => __('Описание, которое отображается на странице оформления заказа', 'woocommerce'),
-                    'default'     => __('Оплатить с помощью платежной системы LiqPay::Pay with LiqPay payment system', 'woocommerce'),
+                    'description' => __('Опис, який відображається на сторінці оформлення замовлення', 'woocommerce'),
+                    'default'     => __('Сплатити за допомогою LiqPay::Pay with LiqPay', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
                 'pay_message' => array(
-                    'title'       => __('Сообщение перед оплатой', 'woocommerce'),
+                    'title'       => __('Повідомлення перед оплатою', 'woocommerce'),
                     'type'        => 'textarea',
-                    'description' => __('Сообщение перед оплатой', 'woocommerce'),
-                    'default'     => __('Благодарим Вас за Ваш заказ, для продолжения нажмите кнопку ниже::Thank you for your order, click the button'),
+                    'description' => __('Повідомлення перед оплатою', 'woocommerce'),
+                    'default'     => __('Дякуюємо за замовлення! Натисніть кнопку нижче::Thank you for your order, click the button'),
                     'desc_tip'    => true,
                 ),
                 'public_key'  => array(
                     'title'       => __('Public key', 'woocommerce'),
                     'type'        => 'text',
-                    'description' => __('Public key LiqPay. Обязательный параметр', 'woocommerce'),
+                    'description' => __('Public key LiqPay. Необхідно заповнити', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
                 'private_key' => array(
                     'title'       => __('Private key', 'woocommerce'),
                     'type'        => 'text',
-                    'description' => __('Private key LiqPay. Обязательный параметр', 'woocommerce'),
+                    'description' => __('Private key LiqPay. Необхідно заповнити', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
                 'lang' => array(
-                    'title'       => __('Язык', 'woocommerce'),
+                    'title'       => __('Мова', 'woocommerce'),
                     'type'        => 'select',
-                    'default'     => 'ru',
-                    'options'     => array('ru'=> __('ru', 'woocommerce'), 'en'=> __('en', 'woocommerce'), 'ru/en'=> __('ru + en', 'woocommerce')),
-                    'description' => __('Язык интерфейса (Для ru + en установите мультиленг плагин. Разделение языков с помощью :: .)', 'woocommerce'),
+                    'default'     => 'uk',
+                    'options'     => array('uk'=> __('uk', 'woocommerce'), 'en'=> __('en', 'woocommerce'), 'uk/en'=> __('uk + en', 'woocommerce')),
+                    'description' => __('Мова интерфейсу (Для uk + en встановіть плагін. Розділ мов за допомогою (?) :: .)', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
                 'lang_function'     => array(
-                    'title'       => __('Функция определения языка', 'woocommerce'),
+                    'title'       => __('Функція визначення мови', 'woocommerce'),
                     'type'        => 'text',
                     'default'     => 'pll_current_language',
-                    'description' => __('Функция определения языка Вашего плагина', 'woocommerce'),
+                    'description' => __('Функція визначення мови вашого плагіну', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
                 'icon'     => array(
                     'title'       => __('Логотип', 'woocommerce'),
                     'type'        => 'text',
-                    'default'     => 'https://www.liqpay.com/1440663992860980/static/img/business/logo.png',
-                    'description' => __('Полный путь к логотипу, расположен на странице заказа', 'woocommerce'),
+                    'default'     => 'https://www.liqpay.ua/1440663992860980/static/img/business/logo.png',
+                    'description' => __('Повний шлях до логотипу', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
                 'button'     => array(
                     'title'       => __('Кнопка', 'woocommerce'),
                     'type'        => 'text',
                     'default'     => '',
-                    'description' => __('Полный путь к картинке кнопки для перехода на LiqPay', 'woocommerce'),
+                    'description' => __('Повний шлях до зображення кнопки для переходу на LiqPay', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
                 'status'     => array(
-                    'title'       => __('Статус заказа', 'woocommerce'),
+                    'title'       => __('Статус замовлення', 'woocommerce'),
                     'type'        => 'text',
                     'default'     => 'processing',
-                    'description' => __('Статус заказа после успешной оплаты', 'woocommerce'),
+                    'description' => __('Статус замовлення після успішної оплати', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
                 'sandbox'     => array(
-                    'title'       => __('Тестовый режим', 'woocommerce'),
-                    'label'       => __('Включить', 'woocommerce'),
+                    'title'       => __('Тестовий режим', 'woocommerce'),
+                    'label'       => __('Ввімкнути', 'woocommerce'),
                     'type'        => 'checkbox',
-                    'description' => __('Данный режим, поможет протестировать оплату, без снятия средств с карточек', 'woocommerce'),
+                    'description' => __('Даний режим не передбачає зняття грошей з карток', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
                 'redirect_page'     => array(
-                    'title'       => __('URL Thanks Page', 'woocommerce'),
+                    'title'       => __('URL сторінки з подякою', 'woocommerce'),
                     'type'        => 'text',
                     'default'     => '',
-                    'description' => __('URL страницы, на которую перейти после оплаты в LiqPay', 'woocommerce'),
+                    'description' => __('URL сторінки, на яку переспрямовується клієнт після успішної оплати LiqPay', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
                 'function_id'     => array(
-                    'title'       => __('Function заказа', 'woocommerce'),
+                    'title'       => __('Функція замовлення', 'woocommerce'),
                     'type'        => 'text',
                     'default'     => '',
-                    'description' => __('Функция должна вернуть Номер заказа', 'woocommerce'),
+                    'description' => __('Повертає номер замовлення', 'woocommerce'),
                     'desc_tip'    => true,
                 ),
             );
         }
 
         function is_valid_for_use() {
-            if (!in_array(get_option('woocommerce_currency'), array('RUB', 'UAH', 'USD', 'EUR'))) {
+            if (!in_array(get_option('woocommerce_currency'), array('UAH', 'USD', 'EUR'))) {
                 return false;
             }
             return true;
@@ -244,7 +244,7 @@ function woocommerce_init() {
                 'version'     => '3',
                 'amount'      => esc_attr($order->get_total()),
                 'currency'    => esc_attr($currency),
-                'description' => _("Оплата за заказ - ") . $order_number,
+                'description' => _("Оплата на замовлення - ") . $order_number,
                 'order_id'    => esc_attr($order_id),
                 'result_url'  => $redirect_page_url,
                 'server_url'  => esc_attr($result_url),
@@ -278,11 +278,11 @@ function woocommerce_init() {
                 $order = new WC_Order($order_id);
 
                 if ($status == 'success' || ($status == 'sandbox' && $this->sandbox == 'yes')) {
-                    $order->update_status($this->status, __('Заказ оплачен (оплата получена)', 'woocommerce'));
-                    $order->add_order_note(__('Клиент оплатил свой заказ', 'woocommerce'));
+                    $order->update_status($this->status, __('Замовлення сплачено (оплата отримана)', 'woocommerce'));
+                    $order->add_order_note(__('Клієнт сплатив замовлення', 'woocommerce'));
                     $woocommerce->cart->empty_cart();
                 } else {
-                    $order->update_status('failed', __('Оплата не была получена', 'woocommerce'));
+                    $order->update_status('failed', __('Оплата не була отримана', 'woocommerce'));
                     wp_redirect($order->get_cancel_order_url());
                     exit;
                 }
@@ -294,7 +294,7 @@ function woocommerce_init() {
 
         public function cnb_form($params) {
 
-            if (!isset($params['language'])) $language = 'ru';
+            if (!isset($params['language'])) $language = 'uk';
             else $language = $params['language'];
 
             $params    = $this->cnb_params($params);
@@ -335,9 +335,6 @@ function woocommerce_init() {
             }
             if (!in_array($params['currency'], $this->_supportedCurrencies)) {
                 throw new InvalidArgumentException('currency is not supported');
-            }
-            if ($params['currency'] == 'RUR') {
-                $params['currency'] = 'RUB';
             }
             if (!isset($params['description'])) {
                 throw new InvalidArgumentException('description is null');
