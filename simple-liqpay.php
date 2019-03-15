@@ -116,7 +116,7 @@ function woocommerce_init() {
                     'title'       => __('Повідомлення перед оплатою', 'woocommerce'),
                     'type'        => 'textarea',
                     'description' => __('Повідомлення перед оплатою', 'woocommerce'),
-                    'default'     => __('Дякуюємо за замовлення! Натисніть кнопку нижче::Thank you for your order, click the button'),
+                    'default'     => __('Дякуємо за замовлення! Натисніть кнопку нижче::Thank you for your order, click the button'),
                     'desc_tip'    => true,
                 ),
                 'public_key'  => array(
