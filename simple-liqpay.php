@@ -244,7 +244,7 @@ function woocommerce_init() {
                 'version'     => '3',
                 'amount'      => esc_attr($order->get_total()),
                 'currency'    => esc_attr($currency),
-                'description' => _("Оплата на замовлення - ") . $order_number,
+                'description' => _("№") . $order_number,
                 'order_id'    => esc_attr($order_id),
                 'result_url'  => $redirect_page_url,
                 'server_url'  => esc_attr($result_url),
